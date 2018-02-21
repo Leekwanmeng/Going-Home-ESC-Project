@@ -5,21 +5,89 @@ using UnityEngine;
 public class PlayerControl : PhysicsObject {
 
     public float maxSpeed = 7f;
-    public float jumpTakeOffSpeed = 10f;
+    public float jumpTakeOffSpeed = 9f;
     public float fallMultiplier = 1.1f;
+	public float minGroundNormalY = .65f;
 	[HideInInspector] public bool facingRight = true;
 
-    private SpriteRenderer spriteRenderer;
-    private Animator animator;
+	protected bool grounded;
+	protected Vector2 groundNormal;
 
-    // Use this for initialization
-    void Awake() {
-        spriteRenderer = GetComponent<SpriteRenderer>(); 
-        animator = GetComponent<Animator>();
+
+	private Vector2 playerVelocity;	// Player Input
+
+	void Update () {
+		playerVelocity = Vector2.zero;
+        ComputeVelocity(); 
+    }
+
+    // For every frame update, forces on RigidBody2D
+    void FixedUpdate() {
+		grounded = false;
+
+        velocity += gravityModifier * Physics2D.gravity * Time.deltaTime;
+		velocity.x = playerVelocity.x;
+        Vector2 distMoved = velocity * Time.deltaTime;
+
+        Vector2 moveAlongGround = new Vector2 (groundNormal.y, -groundNormal.x);	// For along line of slope
+		Vector2 xMove = moveAlongGround * distMoved.x;
+		Vector2 yMove = Vector2.up * distMoved.y;
+        horizontalMovement(xMove);
+		verticalMovement(yMove);
+    }
+
+	void movement(Vector2 move, bool yMovement) {
+        float distance = move.magnitude;
+
+        // Ignores if idle
+        if (distance > minMoveDistance) {
+            checkCollision(move, distance);
+
+            for (int i = 0; i < hitBufferList.Count; i++) {
+                Vector2 currentNormal = hitBufferList[i].normal;
+                if (currentNormal.y > minGroundNormalY) {
+                    grounded = true;
+                    if (yMovement) {
+                        groundNormal = currentNormal;
+                        currentNormal.x = 0;
+                    }
+                }
+
+                float projection = Vector2.Dot(velocity, currentNormal);
+                if (projection < 0) {
+                    velocity = velocity - projection * currentNormal;
+                }
+
+                float modifiedDistance = hitBufferList[i].distance - shellRadius;
+                if (modifiedDistance < distance) {
+                	distance = modifiedDistance;
+                }
+            }
+
+        }
+
+        rb2d.position = rb2d.position + move.normalized * distance;
+    }
+
+    void horizontalMovement(Vector2 xMove) {
+    	movement(xMove, false);
+    }
+
+    void verticalMovement(Vector2 yMove) {
+		movement(yMove, true);
+    }
+
+    void checkCollision(Vector2 move, float distance) {
+    	// shell as padding to prevent colliders from being stuck
+		int count = rb2d.Cast (move, contactFilter, hitBuffer, distance + shellRadius);
+        hitBufferList.Clear();
+        for (int i = 0; i < count; i++) {
+            hitBufferList.Add(hitBuffer[i]);
+        }
     }
 
 
-    protected override void ComputeVelocity() {
+	protected void ComputeVelocity() {
         Vector2 move = Vector2.zero;
         move.x = Input.GetAxis ("Horizontal");
 

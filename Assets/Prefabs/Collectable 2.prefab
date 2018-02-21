@@ -20,10 +20,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4225899704961380}
   - component: {fileID: 212618677711410448}
-  - component: {fileID: 58660744396877262}
+  - component: {fileID: 60361036155456956}
   - component: {fileID: 114424923399669766}
   m_Layer: 0
-  m_Name: Collectable
+  m_Name: Collectable 2
   m_TagString: Collectable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,8 +42,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &58660744396877262
-CircleCollider2D:
+--- !u!60 &60361036155456956
+PolygonCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -55,8 +55,21 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 0.9375}
+    newSize: {x: 1, y: 0.9375}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.5, y: -0.46875}
+      - {x: 0.5, y: -0.46875}
+      - {x: 0.5, y: 0.46875}
+      - {x: -0.5, y: 0.46875}
 --- !u!114 &114424923399669766
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -68,6 +81,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0fad01e38d61fa46b0bc6c6d86d5824, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interacted: 0
+  triggered: 0
 --- !u!212 &212618677711410448
 SpriteRenderer:
   m_ObjectHideFlags: 1
