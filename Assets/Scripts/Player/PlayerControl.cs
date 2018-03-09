@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class PlayerControl : PhysicsObject {
 
@@ -13,12 +14,21 @@ public class PlayerControl : PhysicsObject {
 	protected bool grounded;
 	protected Vector2 groundNormal;
 
-
 	private Vector2 playerVelocity;	// Player Input
 
+	// Initialisation for local player
+	// TODO: Configure cameras and input
+	public override void OnStartLocalPlayer() {
+		
+	}
+
 	void Update () {
+		if (!isLocalPlayer) {
+			return;
+		}
 		playerVelocity = Vector2.zero;
         ComputeVelocity(); 
+        CheckDuck();
     }
 
     // For every frame update, forces on RigidBody2D
@@ -110,6 +120,15 @@ public class PlayerControl : PhysicsObject {
 		playerVelocity.x = move.x * maxSpeed;
     }
 
+    void CheckDuck() {
+    	if (Input.GetButtonDown("Fire1")) {
+    		animator.SetBool("interact", true);
+		} else {
+			animator.SetBool("interact", false);
+    	}
+    }
+
+    /*
     public void MoveRight() {
     	print("working right");
     	playerVelocity.x = maxSpeed;
@@ -123,6 +142,7 @@ public class PlayerControl : PhysicsObject {
     public void stopMovement() {
 		playerVelocity.x = 0;
     }
+    */
 
 	void flip() {
         facingRight = !facingRight;
