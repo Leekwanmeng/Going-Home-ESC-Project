@@ -1,0 +1,52 @@
+
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.TestTools;
+using NUnit.Framework;
+using System.Collections;
+
+public class playercontrolTest {
+	//Test the horizontal movement to the right.
+
+	[Test]
+	public void GameObject_CreatedWithGiven_WillHaveTheName()
+	{
+		var go = new GameObject("1");
+
+		Assert.AreEqual("1", go.name);
+	}
+
+	[Test]
+	public void playercontrolTestHorizontalRight() {
+		// Use the Assert class to test conditions.
+	
+		Assert.AreEqual(9,);
+	}
+
+	//Test the horizontal movement to the right.
+	[Test]
+	public void playercontrolTestHorizontalLeft() {
+		// Use the Assert class to test conditions.
+		Assert.AreEqual(-1,-1);
+	}
+	//Test the vertical movement 
+	[Test]
+	public void playercontrolTestVertical(){
+		Assert.AreEqual (4,4);
+	}
+	//Test the boundary for enemy
+	[Test]
+	public void playercontrolTestBoundaryForEnemy(){
+		Assert.Equals ((1.31,0.65),(1.31,0.65));
+	}
+
+	// A UnityTest behaves like a coroutine in PlayMode
+	// and allows you to yield null to skip a frame in EditMode
+	[UnityTest]
+	public IEnumerator playercontrolTestWithEnumeratorPasses() {
+//		 Use the Assert class to test conditions.
+//		 yield to skip a frame
+		yield return null;
+	}
+}
+  
