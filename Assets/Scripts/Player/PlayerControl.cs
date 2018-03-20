@@ -10,7 +10,7 @@ public class PlayerControl : PhysicsObject {
     public float fallMultiplier = 1.1f;
 	public float minGroundNormalY = .65f;
 	[HideInInspector] public bool facingRight = true;
-    
+	public bool grounded;
     
     protected static bool leftBtnPressed;
 
@@ -23,7 +23,6 @@ public class PlayerControl : PhysicsObject {
     protected static bool BPressed;
 
 
-	protected bool grounded;
 	protected Vector2 groundNormal;
 
 	private Vector2 playerVelocity;	// Player Input
