@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 
 public class PlayerControl : PhysicsObject {
 
@@ -9,26 +8,28 @@ public class PlayerControl : PhysicsObject {
     public float jumpTakeOffSpeed = 9f;
     public float fallMultiplier = 1.1f;
 	public float minGroundNormalY = .65f;
+	public float test=0f;
+
+	//test
+
+	private Vector2 playerVelocity;
+	private bool isJump;
+	private bool isLeft;
+	private bool isRight;
+
+
+
 	[HideInInspector] public bool facingRight = true;
 
 	protected bool grounded;
 	protected Vector2 groundNormal;
 
-	private Vector2 playerVelocity;	// Player Input
 
-	// Initialisation for local player
-	// TODO: Configure cameras and input
-	public override void OnStartLocalPlayer() {
-		
-	}
+// Player Input
 
 	void Update () {
-		if (!isLocalPlayer) {
-			return;
-		}
 		playerVelocity = Vector2.zero;
         ComputeVelocity(); 
-        CheckDuck();
     }
 
     // For every frame update, forces on RigidBody2D
@@ -44,9 +45,14 @@ public class PlayerControl : PhysicsObject {
 		Vector2 yMove = Vector2.up * distMoved.y;
         horizontalMovement(xMove);
 		verticalMovement(yMove);
-    }
+	//	gameObject.tag.
+		print (rb2d.position);
 
-	void movement(Vector2 move, bool yMovement) {
+
+
+   }
+
+	float movement(Vector2 move, bool yMovement) {
         float distance = move.magnitude;
 
         // Ignores if idle
@@ -77,11 +83,18 @@ public class PlayerControl : PhysicsObject {
         }
 
         rb2d.position = rb2d.position + move.normalized * distance;
+		return rb2d.position.magnitude;
+	
     }
 
-    void horizontalMovement(Vector2 xMove) {
-    	movement(xMove, false);
+     float horizontalMovement(Vector2 xMove) {
+    	float position = movement(xMove, false);
+		return position;
     }
+	float teSt(float t){
+		t = Mathf.Abs (velocity.x) / maxSpeed;
+		return t;
+	}
 
     void verticalMovement(Vector2 yMove) {
 		movement(yMove, true);
@@ -115,24 +128,19 @@ public class PlayerControl : PhysicsObject {
 		}
 
         animator.SetBool("grounded", grounded);
+		test = Mathf.Abs (velocity.x) / maxSpeed;
         animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);
 
 		playerVelocity.x = move.x * maxSpeed;
     }
 
-    void CheckDuck() {
-    	if (Input.GetButtonDown("Fire1")) {
-    		animator.SetBool("interact", true);
-		} else {
-			animator.SetBool("interact", false);
-    	}
-    }
-
-    /*
     public void MoveRight() {
     	print("working right");
+		//Debug.Log("hththt");
     	playerVelocity.x = maxSpeed;
+		 
     }
+
 
     public void MoveLeft(){
 		print("working left");
@@ -142,7 +150,6 @@ public class PlayerControl : PhysicsObject {
     public void stopMovement() {
 		playerVelocity.x = 0;
     }
-    */
 
 	void flip() {
         facingRight = !facingRight;
@@ -150,6 +157,52 @@ public class PlayerControl : PhysicsObject {
         theScale.x *= -1;
         transform.localScale = theScale;
     }
+
+
+
+	//set n get
+	public Vector2 getVelocity(){
+		return playerVelocity;
+	}
+	public void moveL(){
+		playerVelocity.x = -3;
+	}
+	public void moveR(){
+		playerVelocity.x = 3;
+	}
+	public void moveH(){
+		playerVelocity.y = 3;
+	}
+	public void setIsJump(){
+		if (playerVelocity.y > 0) {
+
+			isJump=true;
+		} else {
+			isJump= false;
+		}
+	}
+	public bool getIsJump(){
+		return isJump;
+	}
+	public void setIsMove(){
+		if (playerVelocity.x > 0) {
+			isRight = true;
+			isLeft = false;
+		} else if (playerVelocity.x < 0) {
+			isRight = false;
+			isLeft = true;
+		} else {
+			isRight = false;
+			isLeft = false;
+		}
+	}
+	public bool getIsLeft(){
+		return isLeft;
+	}
+	public bool getIsRight(){
+		return isRight;
+	}
+
 
 
 }
