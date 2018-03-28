@@ -1,0 +1,58 @@
+using UnityEngine;
+using UnityEditor;
+using NUnit.Framework;
+
+public class NewEditModeTest1
+{
+
+	[Test]
+	public void initVelTest()
+	{
+		var player = new PlayerControl();
+		var expectdVel =  Vector2.zero;
+
+		Assert.AreEqual(expectdVel, player.getVelocity());
+	}
+	[Test]
+	public void LeftTest()
+	{
+		var player = new PlayerControl();
+		player.moveL ();
+		player.setIsMove ();
+		bool isLeft = player.getIsLeft();
+
+		Assert.AreEqual(isLeft, true);
+	}
+	[Test]
+	public void RightTest()
+	{
+		var player = new PlayerControl();
+		player.moveR ();
+		player.setIsMove ();
+		bool isRight = player.getIsRight();
+
+		Assert.AreEqual(isRight, true);
+	}
+	[Test]
+	public void JumpTest()
+	{
+		var player = new PlayerControl();
+		player.moveH ();
+		player.setIsJump ();
+		bool isJump = player.getIsJump();
+
+		Assert.AreEqual(isJump, true);
+	}
+	[Test]
+	public void livesTest()
+	{
+		var player = new PlayerLives();
+		player.setLives (0);
+		int l = player.getLives ();
+		player.setIsDead (l);
+		bool isDead = player.getIsDead();
+
+		Assert.AreEqual(isDead, true);
+	}
+		
+}
